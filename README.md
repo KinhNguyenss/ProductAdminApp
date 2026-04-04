@@ -33,16 +33,16 @@
 
 ## ✨ Tính năng
 
-| Tính năng | Mô tả |
-|-----------|-------|
-| 🔐 **Đăng nhập** | Xác thực bằng Email/Password qua Firebase Auth |
-| 📦 **Xem danh sách** | Hiển thị toàn bộ sản phẩm với real-time sync từ Firestore |
-| 🔍 **Tìm kiếm** | Lọc sản phẩm theo tên hoặc loại ngay trên client |
-| ➕ **Thêm sản phẩm** | Nhập thông tin + chụp/chọn ảnh từ thư viện, upload lên Cloudinary |
-| ✏️ **Sửa sản phẩm** | Chỉnh sửa toàn bộ thông tin và thay thế hình ảnh |
-| 🗑️ **Xóa sản phẩm** | Xóa vĩnh viễn khỏi Firestore với xác nhận trước |
-| 🔄 **Pull-to-refresh** | Kéo xuống để làm mới danh sách |
-| 🚪 **Đăng xuất** | Đăng xuất an toàn, xóa session |
+| Tính năng              | Mô tả                                                             |
+| ---------------------- | ----------------------------------------------------------------- |
+| 🔐 **Đăng nhập**       | Xác thực bằng Email/Password qua Firebase Auth                    |
+| 📦 **Xem danh sách**   | Hiển thị toàn bộ sản phẩm với real-time sync từ Firestore         |
+| 🔍 **Tìm kiếm**        | Lọc sản phẩm theo tên hoặc loại ngay trên client                  |
+| ➕ **Thêm sản phẩm**   | Nhập thông tin + chụp/chọn ảnh từ thư viện, upload lên Cloudinary |
+| ✏️ **Sửa sản phẩm**    | Chỉnh sửa toàn bộ thông tin và thay thế hình ảnh                  |
+| 🗑️ **Xóa sản phẩm**    | Xóa vĩnh viễn khỏi Firestore với xác nhận trước                   |
+| 🔄 **Pull-to-refresh** | Kéo xuống để làm mới danh sách                                    |
+| 🚪 **Đăng xuất**       | Đăng xuất an toàn, xóa session                                    |
 
 ---
 
@@ -71,18 +71,18 @@
 
 ### Stack chính
 
-| Layer | Công nghệ |
-|-------|-----------|
-| **Framework** | React Native + Expo SDK 54 |
-| **Ngôn ngữ** | TypeScript (layout) + JavaScript (screens) |
-| **Routing** | Expo Router (file-based) |
-| **Database** | Firebase Firestore (NoSQL, real-time) |
-| **Auth** | Firebase Authentication (Email/Password) |
-| **Image Hosting** | Cloudinary (upload signed) |
-| **HTTP Client** | Axios |
-| **State** | React Hooks (useState, useEffect, useCallback) |
-| **Navigation** | @react-navigation/stack + bottom-tabs |
-| **Storage** | AsyncStorage (persist auth session) |
+| Layer             | Công nghệ                                      |
+| ----------------- | ---------------------------------------------- |
+| **Framework**     | React Native + Expo SDK 54                     |
+| **Ngôn ngữ**      | TypeScript (layout) + JavaScript (screens)     |
+| **Routing**       | Expo Router (file-based)                       |
+| **Database**      | Firebase Firestore (NoSQL, real-time)          |
+| **Auth**          | Firebase Authentication (Email/Password)       |
+| **Image Hosting** | Cloudinary (upload signed)                     |
+| **HTTP Client**   | Axios                                          |
+| **State**         | React Hooks (useState, useEffect, useCallback) |
+| **Navigation**    | @react-navigation/stack + bottom-tabs          |
+| **Storage**       | AsyncStorage (persist auth session)            |
 
 ---
 
@@ -173,12 +173,12 @@ const firebaseConfig = {
 
 Collection: **`sanpham`**
 
-| Field | Kiểu | Mô tả |
-|-------|------|-------|
-| `tensp` | string | Tên sản phẩm |
-| `loaisp` | string | Loại sản phẩm (Điện tử, Thời trang, ...) |
-| `gia` | number | Giá sản phẩm (VNĐ) |
-| `hinhanh` | string | URL hình ảnh từ Cloudinary |
+| Field     | Kiểu   | Mô tả                                    |
+| --------- | ------ | ---------------------------------------- |
+| `tensp`   | string | Tên sản phẩm                             |
+| `loaisp`  | string | Loại sản phẩm (Điện tử, Thời trang, ...) |
+| `gia`     | number | Giá sản phẩm (VNĐ)                       |
+| `hinhanh` | string | URL hình ảnh từ Cloudinary               |
 
 ### Bật Firebase Authentication
 
@@ -204,9 +204,9 @@ service cloud.firestore {
 File cấu hình: `src/config/cloudinary.js`
 
 ```js
-export const CLOUDINARY_CLOUD_NAME = 'your-cloud-name';
-export const CLOUDINARY_API_KEY    = 'your-api-key';
-export const CLOUDINARY_API_SECRET = 'your-api-secret';
+export const CLOUDINARY_CLOUD_NAME = "your-cloud-name";
+export const CLOUDINARY_API_KEY = "your-api-key";
+export const CLOUDINARY_API_SECRET = "your-api-secret";
 ```
 
 > ⚠️ **Lưu ý bảo mật:** Không commit `API_SECRET` lên Git public. Sử dụng biến môi trường hoặc Expo secrets trong môi trường production.
@@ -301,16 +301,16 @@ Lưu URL vào Firestore cùng thông tin sản phẩm
 
 ## 📦 Dependencies chính
 
-| Package | Phiên bản | Mục đích |
-|---------|-----------|----------|
-| `expo` | ~54.0 | Framework Expo |
-| `expo-router` | ~6.0 | File-based routing |
-| `expo-image` | ~3.0 | Hiển thị ảnh tối ưu |
-| `expo-image-picker` | ~17.0 | Chọn ảnh từ thiết bị |
-| `firebase` | ^12.11 | Auth + Firestore |
-| `axios` | ^1.14 | HTTP client upload Cloudinary |
-| `@react-native-async-storage/async-storage` | ^2.2 | Persist Firebase session |
-| `react-native-reanimated` | ~4.1 | Animation |
+| Package                                     | Phiên bản | Mục đích                      |
+| ------------------------------------------- | --------- | ----------------------------- |
+| `expo`                                      | ~54.0     | Framework Expo                |
+| `expo-router`                               | ~6.0      | File-based routing            |
+| `expo-image`                                | ~3.0      | Hiển thị ảnh tối ưu           |
+| `expo-image-picker`                         | ~17.0     | Chọn ảnh từ thiết bị          |
+| `firebase`                                  | ^12.11    | Auth + Firestore              |
+| `axios`                                     | ^1.14     | HTTP client upload Cloudinary |
+| `@react-native-async-storage/async-storage` | ^2.2      | Persist Firebase session      |
+| `react-native-reanimated`                   | ~4.1      | Animation                     |
 
 ---
 
@@ -324,4 +324,4 @@ Lưu URL vào Firestore cùng thông tin sản phẩm
 
 ## 📄 License
 
-MIT © 2026 — ProductAdmin
+MIT © 2026 — KinhNguyen
