@@ -1,47 +1,50 @@
-import React, { useState } from 'react';
+import { useRouter } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
   ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   StatusBar,
-  Image,
-} from 'react-native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebase';
-import { useRouter } from 'expo-router';
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
+import { auth } from "../config/firebase";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ email và mật khẩu!');
+      Alert.alert("Lỗi", "Vui lòng nhập đầy đủ email và mật khẩu!");
       return;
     }
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
-      router.replace('/product-list');
+      router.replace("/product-list");
     } catch (error) {
-      let message = 'Đăng nhập thất bại. Vui lòng thử lại.';
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        message = 'Email hoặc mật khẩu không đúng!';
-      } else if (error.code === 'auth/invalid-email') {
-        message = 'Email không hợp lệ!';
-      } else if (error.code === 'auth/too-many-requests') {
-        message = 'Quá nhiều lần thử. Vui lòng thử lại sau.';
+      let message = "Đăng nhập thất bại. Vui lòng thử lại.";
+      if (
+        error.code === "auth/user-not-found" ||
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/invalid-credential"
+      ) {
+        message = "Email hoặc mật khẩu không đúng!";
+      } else if (error.code === "auth/invalid-email") {
+        message = "Email không hợp lệ!";
+      } else if (error.code === "auth/too-many-requests") {
+        message = "Quá nhiều lần thử. Vui lòng thử lại sau.";
       }
-      Alert.alert('Lỗi đăng nhập', message);
+      Alert.alert("Lỗi đăng nhập", message);
     } finally {
       setLoading(false);
     }
@@ -50,7 +53,7 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <StatusBar barStyle="light-content" backgroundColor="#0f0c29" />
 
@@ -99,7 +102,7 @@ export default function LoginScreen() {
                 autoComplete="password"
               />
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <Text style={styles.eyeIcon}>{showPassword ? '🙈' : '👁️'}</Text>
+                <Text style={styles.eyeIcon}>{showPassword ? "🙈" : "👁️"}</Text>
               </TouchableOpacity>
             </View>
 
@@ -116,7 +119,22 @@ export default function LoginScreen() {
               )}
             </TouchableOpacity>
 
-            <Text style={styles.hintText}>Tài khoản: admin@gmail.com / 123456</Text>
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>hoặc</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            <TouchableOpacity
+              style={styles.registerLinkBtn}
+              onPress={() => router.push("/register")}
+              activeOpacity={0.75}
+            >
+              <Text style={styles.registerLinkText}>
+                Chưa có tài khoản?{" "}
+                <Text style={styles.registerLinkHighlight}>Đăng ký ngay</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -130,65 +148,65 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    backgroundColor: '#0f0c29',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#0f0c29",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   circle1: {
-    position: 'absolute',
+    position: "absolute",
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(102, 51, 238, 0.15)',
+    backgroundColor: "rgba(102, 51, 238, 0.15)",
     top: -80,
     right: -80,
   },
   circle2: {
-    position: 'absolute',
+    position: "absolute",
     width: 250,
     height: 250,
     borderRadius: 125,
-    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+    backgroundColor: "rgba(33, 150, 243, 0.1)",
     bottom: -60,
     left: -60,
   },
   card: {
-    width: '100%',
+    width: "100%",
     maxWidth: 400,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: "rgba(255,255,255,0.05)",
     borderRadius: 24,
     padding: 32,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderColor: "rgba(255,255,255,0.1)",
   },
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 32,
   },
   logoBox: {
     width: 72,
     height: 72,
     borderRadius: 20,
-    backgroundColor: 'rgba(102, 51, 238, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(102, 51, 238, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(102, 51, 238, 0.5)',
+    borderColor: "rgba(102, 51, 238, 0.5)",
   },
   logoIcon: {
     fontSize: 36,
   },
   appName: {
     fontSize: 26,
-    fontWeight: '800',
-    color: '#fff',
+    fontWeight: "800",
+    color: "#fff",
     letterSpacing: 0.5,
   },
   appSubtitle: {
     fontSize: 13,
-    color: '#8899aa',
+    color: "#8899aa",
     marginTop: 4,
   },
   form: {
@@ -196,20 +214,20 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
-    fontWeight: '600',
-    color: '#aabbc8',
+    fontWeight: "600",
+    color: "#aabbc8",
     marginBottom: 4,
     marginTop: 8,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255,255,255,0.07)",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: "rgba(255,255,255,0.12)",
     paddingHorizontal: 14,
     marginBottom: 4,
   },
@@ -220,7 +238,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 50,
-    color: '#fff',
+    color: "#fff",
     fontSize: 15,
   },
   eyeIcon: {
@@ -228,13 +246,13 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   loginBtn: {
-    backgroundColor: '#6633ee',
+    backgroundColor: "#6633ee",
     borderRadius: 12,
     height: 52,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 20,
-    shadowColor: '#6633ee',
+    shadowColor: "#6633ee",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,
@@ -244,15 +262,36 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   loginBtnText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 0.5,
   },
-  hintText: {
-    textAlign: 'center',
-    color: '#556677',
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 16,
+    gap: 10,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "rgba(255,255,255,0.1)",
+  },
+  dividerText: {
+    color: "#556677",
     fontSize: 12,
-    marginTop: 16,
+  },
+  registerLinkBtn: {
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  registerLinkText: {
+    color: "#8899aa",
+    fontSize: 14,
+  },
+  registerLinkHighlight: {
+    color: "#00c896",
+    fontWeight: "700",
   },
 });

@@ -9,6 +9,7 @@ export default function RootLayout() {
         <Stack.Screen name="product-list" options={{ headerShown: false }} />
         <Stack.Screen name="add-product" options={{ headerShown: false }} />
         <Stack.Screen name="edit-product" options={{ headerShown: false }} />
+        <Stack.Screen name="register" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="light" />
     </>
