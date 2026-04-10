@@ -18,6 +18,7 @@ import axios from 'axios';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { CLOUDINARY_URL, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from '../config/cloudinary';
+import { goiYGia } from '../config/gemini';
 import { useRouter } from 'expo-router';
 
 export default function AddProductScreen() {
@@ -28,6 +29,9 @@ export default function AddProductScreen() {
   const [imageUri, setImageUri] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [pricePlaceholder, setPricePlaceholder] = useState('VD: 299000');
+  const [aiSuggested, setAiSuggested] = useState(false);
 
   const pickImage = async () => {
     const { status } = await ImagePickerLib.requestMediaLibraryPermissionsAsync();
@@ -45,6 +49,29 @@ export default function AddProductScreen() {
 
     if (!result.canceled && result.assets[0]) {
       setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const handleAISuggestPrice = async () => {
+    if (!tensp.trim()) {
+      Alert.alert('Gợi ý AI', 'Vui lòng nhập tên sản phẩm trước!');
+      return;
+    }
+    setAiLoading(true);
+    setAiSuggested(false);
+    try {
+      const suggestedPrice = await goiYGia(tensp.trim());
+      if (suggestedPrice) {
+        setPricePlaceholder(suggestedPrice);
+        setAiSuggested(true);
+      } else {
+        Alert.alert('AI', 'Không thể gợi ý giá cho sản phẩm này.');
+      }
+    } catch (error) {
+      console.error('Gemini error:', error);
+      Alert.alert('Lỗi AI', 'Không thể kết nối Gemini. Vui lòng thử lại.');
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -121,7 +148,7 @@ export default function AddProductScreen() {
     }
   };
 
-  const isLoading = uploading || saving;
+  const isLoading = uploading || saving || aiLoading;
 
   return (
     <KeyboardAvoidingView
@@ -164,13 +191,33 @@ export default function AddProductScreen() {
         <View style={styles.formCard}>
           <View style={styles.field}>
             <Text style={styles.label}>Tên sản phẩm *</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Nhập tên sản phẩm"
-              placeholderTextColor="#556677"
-              value={tensp}
-              onChangeText={setTensp}
-            />
+            <View style={styles.inputRow}>
+              <TextInput
+                style={[styles.input, styles.inputFlex]}
+                placeholder="Nhập tên sản phẩm"
+                placeholderTextColor="#556677"
+                value={tensp}
+                onChangeText={(text) => {
+                  setTensp(text);
+                  if (aiSuggested) {
+                    setAiSuggested(false);
+                    setPricePlaceholder('VD: 299000');
+                  }
+                }}
+              />
+              <TouchableOpacity
+                style={[styles.aiBtn, aiLoading && styles.aiBtnLoading]}
+                onPress={handleAISuggestPrice}
+                disabled={aiLoading}
+                activeOpacity={0.8}
+              >
+                {aiLoading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Text style={styles.aiBtnText}>✨ AI</Text>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.field}>
@@ -185,15 +232,30 @@ export default function AddProductScreen() {
           </View>
 
           <View style={styles.field}>
-            <Text style={styles.label}>Giá (VNĐ) *</Text>
+            <View style={styles.labelRow}>
+              <Text style={styles.label}>Giá (VNĐ) *</Text>
+              {aiSuggested && (
+                <View style={styles.aiBadge}>
+                  <Text style={styles.aiBadgeText}>✨ Gợi ý từ AI</Text>
+                </View>
+              )}
+            </View>
             <TextInput
-              style={styles.input}
-              placeholder="VD: 299000"
-              placeholderTextColor="#556677"
+              style={[styles.input, aiSuggested && styles.inputAiHighlight]}
+              placeholder={pricePlaceholder}
+              placeholderTextColor={aiSuggested ? '#a78bfa' : '#556677'}
               value={gia}
               onChangeText={setGia}
               keyboardType="numeric"
             />
+            {aiSuggested && !gia && (
+              <TouchableOpacity
+                style={styles.applyBtn}
+                onPress={() => setGia(pricePlaceholder)}
+              >
+                <Text style={styles.applyBtnText}>Áp dụng giá gợi ý: {Number(pricePlaceholder).toLocaleString('vi-VN')} ₫</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -358,5 +420,74 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  inputFlex: {
+    flex: 1,
+  },
+  aiBtn: {
+    backgroundColor: '#7c3aed',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#7c3aed',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  aiBtnLoading: {
+    opacity: 0.7,
+    paddingHorizontal: 18,
+  },
+  aiBtnText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  aiBadge: {
+    backgroundColor: 'rgba(124, 58, 237, 0.2)',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(124, 58, 237, 0.4)',
+  },
+  aiBadgeText: {
+    color: '#a78bfa',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  inputAiHighlight: {
+    borderColor: 'rgba(124, 58, 237, 0.5)',
+    backgroundColor: 'rgba(124, 58, 237, 0.07)',
+  },
+  applyBtn: {
+    marginTop: 8,
+    backgroundColor: 'rgba(124, 58, 237, 0.15)',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(124, 58, 237, 0.3)',
+    alignItems: 'center',
+  },
+  applyBtnText: {
+    color: '#a78bfa',
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

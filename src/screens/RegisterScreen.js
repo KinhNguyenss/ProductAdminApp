@@ -93,9 +93,6 @@ export default function RegisterScreen() {
           <View style={styles.card}>
             {/* Header */}
             <View style={styles.logoContainer}>
-              <View style={styles.logoBox}>
-                <Text style={styles.logoIcon}>✨</Text>
-              </View>
               <Text style={styles.title}>Tạo tài khoản</Text>
               <Text style={styles.subtitle}>
                 Đăng ký để bắt đầu quản lý sản phẩm
@@ -107,7 +104,6 @@ export default function RegisterScreen() {
               {/* Display Name */}
               <Text style={styles.label}>Tên hiển thị</Text>
               <View style={styles.inputWrapper}>
-                <Text style={styles.inputIcon}>👤</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Nguyễn Văn A"
@@ -122,7 +118,6 @@ export default function RegisterScreen() {
               {/* Email */}
               <Text style={styles.label}>Email</Text>
               <View style={styles.inputWrapper}>
-                <Text style={styles.inputIcon}>✉️</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="example@gmail.com"
@@ -139,7 +134,6 @@ export default function RegisterScreen() {
               {/* Password */}
               <Text style={styles.label}>Mật khẩu</Text>
               <View style={styles.inputWrapper}>
-                <Text style={styles.inputIcon}>🔒</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Tối thiểu 6 ký tự"
@@ -168,7 +162,6 @@ export default function RegisterScreen() {
                     styles.inputWrapperError,
                 ]}
               >
-                <Text style={styles.inputIcon}>🔑</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Nhập lại mật khẩu"
